@@ -1,75 +1,45 @@
-import PropTypes from 'prop-types';
+import React from "react";
+import "../index.css";
+import etsyData from "../data/etsy.json";
 
-function Listing({ items = [] }) {
+export default function Listing() {
   return (
-    <div className="item-list">
-      {items.map(item => {
-        const {
-          listing_id,
-          url,
-          MainImage,
-          title,
-          currency_code,
-          price,
-          quantity
-        } = item;
+    <div className="container">
+      <div className="product-grid">
+        {etsyData.map((item) => {
+          let stockClass = "";
+          if (item.quantity <= 5) stockClass = "stock-low";
+          else if (item.quantity <= 20) stockClass = "stock-medium";
+          else stockClass = "stock-high";
 
-        if (!MainImage) return null;
+          return (
+            <div className="product-card" key={item.listing_id}>
+              {item.is_digital && <div className="digital-badge">Digital</div>}
 
-        const shortTitle =
-          title.length > 50 ? title.slice(0, 50) + '…' : title;
-
-        let formattedPrice;
-        switch (currency_code) {
-          case 'USD':
-            formattedPrice = `$${price}`;
-            break;
-          case 'EUR':
-            formattedPrice = `€${price}`;
-            break;
-          case 'GBP':
-            formattedPrice = `£${price}`;
-            break;
-          default:
-            formattedPrice = `${currency_code} ${price}`;
-        }
-
-        let stockClass;
-        if (quantity <= 10) {
-          stockClass = 'stock-low';
-        } else if (quantity <= 20) {
-          stockClass = 'stock-medium';
-        } else {
-          stockClass = 'stock-high';
-        }
-
-        return (
-          <div className="product-card" key={listing_id}>
-            <a href={url} target="_blank" rel="noreferrer">
               <img
-                src={MainImage.url_570xN}
-                alt={title}
+                src={item.MainImage?.url_570xN || "https://via.placeholder.com/240"}
+                alt={item.title}
                 className="product-image"
               />
-            </a>
-            <div className="product-info">
-              <h3 className="product-title">{shortTitle}</h3>
-              <div className="price-container">
-                <div className="product-price">{formattedPrice}</div>
-                <span className={`stock-badge ${stockClass}`}>
-                  {quantity} left
-                </span>
+
+              <div className="product-info">
+                <div className="product-title">{item.title}</div>
+                <div className="price-container">
+                  <div className="product-price">
+                    {item.currency_code === "USD" ? "$" :
+                     item.currency_code === "EUR" ? "€" :
+                     item.currency_code}
+                    {item.price}
+                  </div>
+                  <div className={`stock-badge ${stockClass}`}>
+                    {item.quantity} left
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 }
-
-Listing.propTypes = {
-  items: PropTypes.array
-};
-
-export default Listing;
