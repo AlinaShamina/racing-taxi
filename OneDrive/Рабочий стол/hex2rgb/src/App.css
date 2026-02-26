@@ -1,0 +1,27 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.converter {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+input {
+  width: 200px;
+  padding: 10px;
+  font-size: 18px;
+  text-align: center;
+}
+
+.result {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: rgba(0,0,0,0.4);
+  color: white;
+  font-size: 18px;
+}
